@@ -1,0 +1,20 @@
+7. https://issues.apache.org/jira/browse/MATH-950
+When one eventstate is changed, not every state is brought to the same point as the updated state. 
+This caused a failed assertion.
+8. https://issues.apache.org/jira/browse/MATH-942
+
+failed test 
+@Test
+    public void testIssue942() {
+        List<Pair<Object,Double>> list = new ArrayList<Pair<Object, Double>>();
+        list.add(new Pair<Object, Double>(new Object() {}, new Double(0)));
+        list.add(new Pair<Object, Double>(new Object() {}, new Double(1)));
+        Assert.assertEquals(1, new DiscreteDistribution<Object>(list).sample(1).length);
+    }
+    
+ Array.newInstance(object, size) creates an array of type object and length size.
+ This is used to get samples of a distribution. The error occurs when the distribution is of 
+ parent class T, and the 0th element which is given to newInstance is of subclass T1. The array
+ will be of type T1, but other elements copied to the sample may not be of type T1, only of T. 
+ This causes an exception. 
+9. 
