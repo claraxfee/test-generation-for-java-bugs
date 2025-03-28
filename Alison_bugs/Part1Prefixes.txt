@@ -1,0 +1,161 @@
+Bug 7 Relevant Tests call acceptStep():
+run grep -r "acceptStep" * on Math7Bug files to see which integrators call accept step
+with their stepstart. In prefixes, look for stepStart to call acceptStep().
+The bug was found by asserting, very different from the evosuite assertions.
+public void handleStep(StepInterpolator interpolator, boolean isLast) {
++          tMin = interpolator.getCurrentTime();
++      }
++
++      public double g(double t, double[]  y) {
++          // once a step has been handled by handleStep,
++          // events checking should only refer to dates after the step
++          Assert.assertTrue(t >= tMin);
++          return y[index];
+When one eventstate is changed, not every state is brought to the same point as the updated state. 
+
+@Test(timeout = 4000)
+  public void test01()  throws Throwable  {
+      ClassicalRungeKuttaIntegrator classicalRungeKuttaIntegrator0 = new ClassicalRungeKuttaIntegrator((-182.701690406));
+      double double0 = classicalRungeKuttaIntegrator0.getCurrentSignedStepsize();
+      assertEquals(Double.NaN, classicalRungeKuttaIntegrator0.getCurrentStepStart(), 0.01);
+      assertEquals(Double.NaN, double0, 0.01);
+  }
+
+@Test(timeout = 4000)
+  public void test10()  throws Throwable  {
+      GraggBulirschStoerIntegrator graggBulirschStoerIntegrator0 = new GraggBulirschStoerIntegrator((-3420.0), (-3420.0), (-3420.0), (-3420.0));
+      graggBulirschStoerIntegrator0.setMaxEvaluations(240);
+      assertEquals(Double.NaN, graggBulirschStoerIntegrator0.getCurrentStepStart(), 0.01);
+  }
+
+
+
+Bug 8 Relevant Tests call sample():
+
+Array.newInstance(object, size) creates an array of type object and length size.
+This is used to get samples of a distribution. The error occurs when the distribution is of 
+parent class T, and the 0th element which is given to newInstance is of subclass T1. The array
+will be of type T1, but other elements copied to the sample may not be of type T1, only of T. 
+This causes an exception. 
+
+@Test(timeout = 4000)
+  public void test7()  throws Throwable  {
+      Integer integer0 = new Integer(1889);
+      Double double0 = new Double(1770.68);
+      Pair<Integer, Double> pair0 = new Pair<Integer, Double>(integer0, double0);
+      List<Pair<Integer, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Integer> discreteDistribution0 = new DiscreteDistribution<Integer>(list0);
+      Integer[] integerArray0 = discreteDistribution0.sample(1889);
+      assertEquals(1889, integerArray0.length);
+  }
+
+@Test(timeout = 4000)
+  public void test6()  throws Throwable  {
+      Double double0 = new Double(681.35188);
+      Pair<Float, Double> pair0 = new Pair<Float, Double>((Float) null, double0);
+      List<Pair<Float, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Float> discreteDistribution0 = new DiscreteDistribution<Float>(list0);
+      Float float0 = discreteDistribution0.sample();
+      assertNull(float0);
+  }
+@Test(timeout = 4000)
+  public void test7()  throws Throwable  {
+      Well44497a well44497a0 = new Well44497a();
+      Short short0 = new Short((short)487);
+      Double double0 = new Double((short)487);
+      Pair<Short, Double> pair0 = new Pair<Short, Double>(short0, double0);
+      List<Pair<Short, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Short> discreteDistribution0 = new DiscreteDistribution<Short>(well44497a0, list0);
+      Short[] shortArray0 = discreteDistribution0.sample((int) (short)487);
+      assertEquals(487, shortArray0.length);
+  }
+
+@Test(timeout = 4000)
+  public void test8()  throws Throwable  {
+      Well44497a well44497a0 = new Well44497a();
+      Short short0 = new Short((short)3162);
+      Double double0 = new Double((short)3162);
+      Pair<Short, Double> pair0 = new Pair<Short, Double>(short0, double0);
+      List<Pair<Short, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Short> discreteDistribution0 = new DiscreteDistribution<Short>(well44497a0, list0);
+      try { 
+        discreteDistribution0.sample((-1915));
+        fail("Expecting exception: IllegalArgumentException");
+      
+      } catch(IllegalArgumentException e) {
+         //
+         // number of samples (-1,915)
+         //
+         verifyException("org.apache.commons.math3.distribution.DiscreteDistribution", e);
+      }
+  }
+}
+
+@Test(timeout = 4000)
+  public void test7()  throws Throwable  {
+      Integer integer0 = new Integer(253);
+      Double double0 = Double.valueOf((double) 253);
+      Pair<Integer, Double> pair0 = new Pair<Integer, Double>(integer0, double0);
+      List<Pair<Integer, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Integer> discreteDistribution0 = new DiscreteDistribution<Integer>(list0);
+      Integer[] integerArray0 = discreteDistribution0.sample(253);
+      assertEquals(253, integerArray0.length);
+  }
+
+@Test(timeout = 4000)
+  public void test8()  throws Throwable  {
+      Integer integer0 = new Integer(243);
+      Double double0 = Double.valueOf((double) 243);
+      Pair<Integer, Double> pair0 = new Pair<Integer, Double>(integer0, double0);
+      List<Pair<Integer, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Integer> discreteDistribution0 = new DiscreteDistribution<Integer>(list0);
+      try { 
+        discreteDistribution0.sample((-792));
+        fail("Expecting exception: IllegalArgumentException");
+      
+      } catch(IllegalArgumentException e) {
+         //
+         // number of samples (-792)
+         //
+         verifyException("org.apache.commons.math3.distribution.DiscreteDistribution", e);
+      }
+  }
+}
+
+
+Bug 9 Relevant Tests call revert():
+Bug in revert()
+A reverted line means that a new line is created with an inverted direction.
+The original code creates a new line from the origin to the origin with the direction subtracted.
+The direction only can store a limited number of values, inverting off of these 
+limited values causes mathematical error.
+The fix uses direction.negate on a clone of the original line.
+
+Test(timeout = 4000)
+  public void test00()  throws Throwable  {
+      Vector3D vector3D0 = Vector3D.NaN;
+      Line line0 = new Line(vector3D0, vector3D0);
+      Line line1 = line0.revert();
+      assertNotSame(line1, line0);
+  }
+
+  @Test(timeout = 4000)
+  public void test00()  throws Throwable  {
+      Vector3D vector3D0 = new Vector3D((-2858.65), (-2858.65), (-2858.65));
+      Vector3D vector3D1 = Vector3D.PLUS_K;
+      Line line0 = new Line(vector3D0, vector3D1);
+      Line line1 = line0.revert();
+      boolean boolean0 = line1.isSimilarTo(line0);
+      assertNotSame(line1, line0);
+      assertTrue(boolean0);
+  }
+
+  @Test(timeout = 4000)
+  public void test00()  throws Throwable  {
+      Vector3D vector3D0 = Vector3D.MINUS_J;
+      double[] doubleArray0 = new double[3];
+      Vector3D vector3D1 = new Vector3D(doubleArray0);
+      Line line0 = new Line(vector3D1, vector3D0);
+      Line line1 = line0.revert();
+      assertNotSame(line1, line0);
+  }

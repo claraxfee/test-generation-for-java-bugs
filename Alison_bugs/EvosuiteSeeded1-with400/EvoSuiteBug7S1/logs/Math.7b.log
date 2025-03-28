@@ -1,0 +1,13 @@
+######  Start test generation  /usr/local/bin/defects4j/framework/bin/gen_tests.pl: 2025-03-25 19:21:12  ######
+Mode: regression
+Parameters:
+ -g evosuite
+ -p Math
+ -v 7b
+ -n 1
+ -b 120
+ -c /usr/local/bin/defects4j/framework/projects/Math/modified_classes/7.src
+ -s 400
+Created test suite archive: Math-7b-evosuite.1.tar.bz2
+Moved test suite archive to output directory: EvoSuiteBug7S1//Math/evosuite/1
+######  End test generation  /usr/local/bin/defects4j/framework/bin/gen_tests.pl: 2025-03-25 19:22:44  ######

@@ -1,0 +1,165 @@
+All three bugs are functional.
+7. https://issues.apache.org/jira/browse/MATH-950
+When one eventstate is changed, not every state is brought to the same point as the updated state. 
+This caused a failed assertion.
+look for acceptset() in 
+/home/ateske/cs383/test-generation-for-java-bugs/Bugs/MathBug7/src/main/java/org/apache/commons/math3/ode/AbstractIntegrator.java
+
+failing test:
+8. https://issues.apache.org/jira/browse/MATH-942
+issue in sample()
+failed test 
+@Test
+    public void testIssue942() {
+        List<Pair<Object,Double>> list = new ArrayList<Pair<Object, Double>>();
+        list.add(new Pair<Object, Double>(new Object() {}, new Double(0)));
+        list.add(new Pair<Object, Double>(new Object() {}, new Double(1)));
+        Assert.assertEquals(1, new DiscreteDistribution<Object>(list).sample(1).length);
+    }
+    
+ Array.newInstance(object, size) creates an array of type object and length size.
+ This is used to get samples of a distribution. The error occurs when the distribution is of 
+ parent class T, and the 0th element which is given to newInstance is of subclass T1. The array
+ will be of type T1, but other elements copied to the sample may not be of type T1, only of T. 
+ This causes an exception. 
+
+9. A reverted line means that a new line is created with an inverted direction.
+The original code creates a new line from the origin to the origin with the direction subtracted.
+The direction only can store a limited number of values, inverting off of these 
+limited values causes mathematical error.
+The fix uses direction.negate on a clone of the original line.
+https://issues.apache.org/jira/browse/MATH-938
+_______________________________________________________________
+Evosuite results:
+bug 7: bug not found 
+BUILD SUCCESSFUL
+Total time: 3 seconds
+Failing tests: 0
+
+___
+
+bug 8: 
+bug not found
+BUILD SUCCESSFUL
+Total time: 2 seconds
+Failing tests: 0
+Relevant prefixes: 
+
+@Test(timeout = 4000)
+  public void test7()  throws Throwable  {
+      Integer integer0 = new Integer(1889);
+      Double double0 = new Double(1770.68);
+      Pair<Integer, Double> pair0 = new Pair<Integer, Double>(integer0, double0);
+      List<Pair<Integer, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Integer> discreteDistribution0 = new DiscreteDistribution<Integer>(list0);
+      Integer[] integerArray0 = discreteDistribution0.sample(1889);
+      assertEquals(1889, integerArray0.length);
+  }
+
+    @Test(timeout = 4000)
+  public void test6()  throws Throwable  {
+      Double double0 = new Double(681.35188);
+      Pair<Float, Double> pair0 = new Pair<Float, Double>((Float) null, double0);
+      List<Pair<Float, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Float> discreteDistribution0 = new DiscreteDistribution<Float>(list0);
+      Float float0 = discreteDistribution0.sample();
+      assertNull(float0);
+  }
+   @Test(timeout = 4000)
+  public void test7()  throws Throwable  {
+      Well44497a well44497a0 = new Well44497a();
+      Short short0 = new Short((short)487);
+      Double double0 = new Double((short)487);
+      Pair<Short, Double> pair0 = new Pair<Short, Double>(short0, double0);
+      List<Pair<Short, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Short> discreteDistribution0 = new DiscreteDistribution<Short>(well44497a0, list0);
+      Short[] shortArray0 = discreteDistribution0.sample((int) (short)487);
+      assertEquals(487, shortArray0.length);
+  }
+
+    @Test(timeout = 4000)
+  public void test8()  throws Throwable  {
+      Well44497a well44497a0 = new Well44497a();
+      Short short0 = new Short((short)3162);
+      Double double0 = new Double((short)3162);
+      Pair<Short, Double> pair0 = new Pair<Short, Double>(short0, double0);
+      List<Pair<Short, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Short> discreteDistribution0 = new DiscreteDistribution<Short>(well44497a0, list0);
+      try { 
+        discreteDistribution0.sample((-1915));
+        fail("Expecting exception: IllegalArgumentException");
+      
+      } catch(IllegalArgumentException e) {
+         //
+         // number of samples (-1,915)
+         //
+         verifyException("org.apache.commons.math3.distribution.DiscreteDistribution", e);
+      }
+  }
+}
+
+@Test(timeout = 4000)
+  public void test7()  throws Throwable  {
+      Integer integer0 = new Integer(253);
+      Double double0 = Double.valueOf((double) 253);
+      Pair<Integer, Double> pair0 = new Pair<Integer, Double>(integer0, double0);
+      List<Pair<Integer, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Integer> discreteDistribution0 = new DiscreteDistribution<Integer>(list0);
+      Integer[] integerArray0 = discreteDistribution0.sample(253);
+      assertEquals(253, integerArray0.length);
+  }
+
+  @Test(timeout = 4000)
+  public void test8()  throws Throwable  {
+      Integer integer0 = new Integer(243);
+      Double double0 = Double.valueOf((double) 243);
+      Pair<Integer, Double> pair0 = new Pair<Integer, Double>(integer0, double0);
+      List<Pair<Integer, Double>> list0 = List.of(pair0, pair0, pair0, pair0, pair0, pair0, pair0);
+      DiscreteDistribution<Integer> discreteDistribution0 = new DiscreteDistribution<Integer>(list0);
+      try { 
+        discreteDistribution0.sample((-792));
+        fail("Expecting exception: IllegalArgumentException");
+      
+      } catch(IllegalArgumentException e) {
+         //
+         // number of samples (-792)
+         //
+         verifyException("org.apache.commons.math3.distribution.DiscreteDistribution", e);
+      }
+  }
+}
+
+bug 9:
+BUILD SUCCESSFUL
+Total time: 2 seconds
+Failing tests: 0
+
+Relevant tests:
+Test(timeout = 4000)
+  public void test00()  throws Throwable  {
+      Vector3D vector3D0 = Vector3D.NaN;
+      Line line0 = new Line(vector3D0, vector3D0);
+      Line line1 = line0.revert();
+      assertNotSame(line1, line0);
+  }
+
+  @Test(timeout = 4000)
+  public void test00()  throws Throwable  {
+      Vector3D vector3D0 = new Vector3D((-2858.65), (-2858.65), (-2858.65));
+      Vector3D vector3D1 = Vector3D.PLUS_K;
+      Line line0 = new Line(vector3D0, vector3D1);
+      Line line1 = line0.revert();
+      boolean boolean0 = line1.isSimilarTo(line0);
+      assertNotSame(line1, line0);
+      assertTrue(boolean0);
+  }
+
+  @Test(timeout = 4000)
+  public void test00()  throws Throwable  {
+      Vector3D vector3D0 = Vector3D.MINUS_J;
+      double[] doubleArray0 = new double[3];
+      Vector3D vector3D1 = new Vector3D(doubleArray0);
+      Line line0 = new Line(vector3D1, vector3D0);
+      Line line1 = line0.revert();
+      assertNotSame(line1, line0);
+  }

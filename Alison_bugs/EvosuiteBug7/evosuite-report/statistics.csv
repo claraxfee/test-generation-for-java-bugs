@@ -1,0 +1,2 @@
+TARGET_CLASS,criterion,Coverage,Total_Goals,Covered_Goals
+org.apache.commons.math3.ode.AbstractIntegrator,BRANCH,0.8285714285714286,70,58

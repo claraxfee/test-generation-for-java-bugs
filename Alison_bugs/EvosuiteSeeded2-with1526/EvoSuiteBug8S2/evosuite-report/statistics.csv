@@ -1,0 +1,2 @@
+TARGET_CLASS,criterion,Coverage,Total_Goals,Covered_Goals
+org.apache.commons.math3.distribution.DiscreteDistribution,BRANCH,0.9615384615384616,26,25
