@@ -1,0 +1,231 @@
+
+BUG01
+
+@Test(timeout = 4000)
+  public void test33()  throws Throwable  {
+      BigFraction bigFraction0 = null;
+      try {
+        bigFraction0 = new BigFraction(3.5829049382293792E280, (-2143669288));
+        fail("Expecting exception: IllegalStateException");
+      
+      } catch(IllegalStateException e) {
+         //
+         // illegal state: Overflow trying to convert 35,829,049,382,293,792,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000 to fraction (9,223,372,036,854,775,807/1)
+         //
+         verifyException("org.apache.commons.math3.fraction.BigFraction", e);
+      }
+  }
+
+
+   @Test(timeout = 4000)
+  public void test16()  throws Throwable  {
+      Fraction fraction0 = null;
+      try {
+        fraction0 = new Fraction((double) 12, 12);
+        fail("Expecting exception: IllegalStateException");
+      
+      } catch(IllegalStateException e) {
+         //
+         // illegal state: Overflow trying to convert 12 to fraction (-11/9,223,372,036,854,775,807)
+         //
+         verifyException("org.apache.commons.math3.fraction.Fraction", e);
+      }
+  }
+
+  @Test(timeout = 4000)
+  public void test17()  throws Throwable  {
+      Fraction fraction0 = null;
+      try {
+        fraction0 = new Fraction((double) Integer.MIN_VALUE);
+        fail("Expecting exception: IllegalStateException");
+      
+      } catch(IllegalStateException e) {
+         //
+         // illegal state: Overflow trying to convert -2,147,483,648 to fraction (-2,147,483,648/1)
+         //
+         verifyException("org.apache.commons.math3.fraction.Fraction", e);
+      }
+  }
+
+
+
+Bug02
+
+@Test(timeout = 4000)
+  public void test09()  throws Throwable  {
+      HypergeometricDistribution hypergeometricDistribution0 = new HypergeometricDistribution(307, 296, 296);
+      hypergeometricDistribution0.sample(296);
+      assertEquals(285.3941368078176, hypergeometricDistribution0.getNumericalMean(), 0.01);
+  }
+
+@Test(timeout = 4000)
+  public void test00()  throws Throwable  {
+      HypergeometricDistribution hypergeometricDistribution0 = new HypergeometricDistribution(4217, 1952, 229);
+      double double0 = hypergeometricDistribution0.cumulativeProbability(4217);
+      assertEquals(1.0, double0, 0.01);
+      assertEquals(106.0014228124259, hypergeometricDistribution0.getNumericalMean(), 0.01);
+  }
+
+@Test(timeout = 4000)
+  public void test00()  throws Throwable  {
+      int[] intArray0 = new int[9];
+      Well44497b well44497b0 = new Well44497b(intArray0);
+      HypergeometricDistribution hypergeometricDistribution0 = new HypergeometricDistribution(well44497b0, 1473, 506, 506);
+      double double0 = hypergeometricDistribution0.probability(783);
+      assertEquals(173.8194161575017, hypergeometricDistribution0.getNumericalMean(), 0.01);
+      assertEquals(0.0, double0, 0.01);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Part A 
+
+    Do the developer written tests assert on functional or safety properties? 
+
+    Bug01
+        This test asserts on functional properties.
+        It tries to ensure that the BigFraction constructor properly approximates fractions given decimal values. 
+        Even though the bug itself was an overflow exception, the test was testing on functional properties. 
+
+    Bug02
+        This test asserts on functional properties. 
+        It tries to ensure that the output of a .sample() method stays within an expected range [0..n]
+    
+    Bug03
+        This test asserts on functional properties. 
+        It tries to ensure that the linear combination of two single-element arrays produces the correct value. 
+        
+
+Part B 
+
+    BUG 01
+
+        Trial 1
+
+        * EvoSuite 1.1.0
+        * Going to generate test cases for class: org.apache.commons.math3.fraction.Fraction
+        * Starting Client-0
+        * Connecting to master process on port 21718
+        * Analyzing classpath: 
+        - /tmp/gen_tests.pl_1134552_1743036584/target/classes
+        * Finished analyzing classpath
+        * Generating tests for class org.apache.commons.math3.fraction.Fraction
+        * Test criterion:
+        - Branch Coverage
+        * Total number of test goals for DYNAMOSA: 114
+        * Using seed 93847502938457
+        * Starting evolution
+        * Initial Number of Goals in DynaMOSA = 42 / 114
+        * Search finished after 31s and 393 generations, 309138 statements, best individual has fitness: 2.0
+        * Minimizing test suite
+        * Going to analyze the coverage criteria
+        * Coverage analysis for criterion BRANCH
+        * Coverage of criterion BRANCH: 98%
+        * Total number of goals: 114
+        * Number of covered goals: 112
+        * Generated 54 tests with total length 105
+        * Resulting test suite's coverage: 98%
+        * Generating assertions
+        * Resulting test suite's mutation score: 52%
+        * Writing tests to file
+        * Writing JUnit test case 'Fraction_ESTest' to /tmp/gen_tests.pl_1134552_1743036584/evosuite
+        * Done!
+        
+        
+        Trial 2
+
+        * EvoSuite 1.1.0
+        * Going to generate test cases for class: org.apache.commons.math3.fraction.BigFraction
+        * Starting Client-0
+        * Connecting to master process on port 6353
+        * Analyzing classpath: 
+        - /tmp/gen_tests.pl_1131189_1743036334/target/classes
+        * Finished analyzing classpath
+        * Generating tests for class org.apache.commons.math3.fraction.BigFraction
+        * Test criterion:
+        - Branch Coverage
+        * Total number of test goals for DYNAMOSA: 133
+        * Using seed 23845
+        * Starting evolution
+        * Initial Number of Goals in DynaMOSA = 73 / 133
+        * Search finished after 33s and 9 generations, 5378 statements, best individual has fitness: 5.0
+        * Minimizing test suite
+        * Going to analyze the coverage criteria
+        * Coverage analysis for criterion BRANCH
+        * Coverage of criterion BRANCH: 96%
+        * Total number of goals: 133
+        * Number of covered goals: 128
+        * Generated 64 tests with total length 142
+        * Resulting test suite's coverage: 96%
+        * Generating assertions
+        * Resulting test suite's mutation score: 48%
+        * Writing tests to file
+        * Writing JUnit test case 'BigFraction_ESTest' to /tmp/gen_tests.pl_1131189_1743036334/evosuite
+        * Done!
+
+        Trial 3
+
+        * Total number of test goals for DYNAMOSA: 114
+        * Using seed 38457
+        * Starting evolution
+        * Initial Number of Goals in DynaMOSA = 42 / 114
+        * Search finished after 31s and 375 generations, 283937 statements, best individual has fitness: 2.0
+        * Minimizing test suite
+        * Going to analyze the coverage criteria
+        * Coverage analysis for criterion BRANCH
+        * Coverage of criterion BRANCH: 98%
+        * Total number of goals: 114
+        * Number of covered goals: 112
+        * Generated 51 tests with total length 101
+        * Resulting test suite's coverage: 98%
+        * Generating assertions
+        * Resulting test suite's mutation score: 49%
+        * Writing tests to file
+        * Writing JUnit test case 'Fraction_ESTest' to /tmp/gen_tests.pl_1137481_1743036763/evosuite
+        * Done!
+
+
+    For each bug, in how many trials was the buggy branch executed? Was it executed with a bug-triggering input?
+
+    BUG 01
+    
+        It only took 1 trial to execute the buggy branch (each trial executed the branch). 
+        However, none were executed with bug-triggering input. 
+
+    BUG 02
+
+        It only took 1 trial to execute the buggy branch (each trial executed the branch). 
+        However, none were executed with bug-triggering input. 
+
+    BUG 03
+
+        It only took 1 trial to execute the buggy branch (each trial executed the branch). 
+        However, none were executed with bug-triggering input. 
+
+
+    Highlight the bugs for which we found success. Of the ones that did cover the bug, why? Was it a small search space?
+
+
+    Of the ones that did not cover the bug, why not? What would it have taken to make it cover it? Was it in the test cluster? Large search space?
+

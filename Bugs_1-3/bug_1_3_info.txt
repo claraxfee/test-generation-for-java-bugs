@@ -1,0 +1,111 @@
+gen_tests.pl -g evosuite -p Math -v 1b  -n 1 -o bug01/bug01_evo_3 -b 120 -s 38457
+
+
+BUG 01
+    
+    in file BigFraction.java: 
+
+        if ((p2 > overflow) || (q2 > overflow)) {            
+            // in maxDenominator mode, if the last fraction was very close to the actual value            
+            // q2 may overflow in the next iteration; in this case return the last one.            
+        +    if (epsilon == 0.0 && FastMath.abs(q1) < maxDenominator) {            
+        +        break;            
+        +    }            
+            throw new FractionConversionException(value, p2, q2);            
+        }
+
+    in file Fraction.java: 
+
+        if ((FastMath.abs(p2) > overflow) || (FastMath.abs(q2) > overflow)) {            
+            // in maxDenominator mode, if the last fraction was very close to the actual value            
+            // q2 may overflow in the next iteration; in this case return the last one.            
+        +   if (epsilon == 0.0 && FastMath.abs(q1) < maxDenominator) {            
+        +      break;            
+        +   }            
+            throw new FractionConversionException(value, p2, q2);            
+        }
+
+
+    failing test in BigFraction.java: 
+
+        BigFractionTest:testDigitLimitConstructor
+        FractionConversionException: illegal state: Overflow trying to convert 0.5 to fraction (2,499,999,794/4,999,999,587)
+
+        @Test
+        public void testDigitLimitConstructor() throws ConvergenceException {
+            assertFraction(2, 5, new BigFraction(0.4, 9));
+            assertFraction(2, 5, new BigFraction(0.4, 99));
+            assertFraction(2, 5, new BigFraction(0.4, 999));
+
+            assertFraction(3, 5, new BigFraction(0.6152, 9));
+            assertFraction(8, 13, new BigFraction(0.6152, 99));
+            assertFraction(510, 829, new BigFraction(0.6152, 999));
+            assertFraction(769, 1250, new BigFraction(0.6152, 9999));
+            
+            // MATH-996
+            assertFraction(1, 2, new BigFraction(0.5000000001, 10));
+        }
+
+    same test and error in Fraction.java
+
+
+BUG 02
+
+    in file HypergeometricDistribution.java
+
+        * size {@code n}, the mean is {@code n * m / N}.            
+            */            
+            public double getNumericalMean() {            
+            +    return (double) (getSampleSize() * getNumberOfSuccesses()) / (double) getPopulationSize();            
+            -    return getSampleSize() * (getNumberOfSuccesses() / (double) getPopulationSize());            
+            }            
+
+    failing test: 
+
+        org.apache.commons.math3.distribution.HypergeometricDistributionTest:testMath1021
+        junit.framework.AssertionFailedError: sample=-50
+
+        @Test
+        public void testMath1021() {
+            final int N = 43130568;
+            final int m = 42976365;
+            final int n = 50;
+            final HypergeometricDistribution dist = new HypergeometricDistribution(N, m, n);
+
+            for (int i = 0; i < 100; i++) {
+                final int sample = dist.sample();
+                Assert.assertTrue("sample=" + sample, 0 <= sample);
+                Assert.assertTrue("sample=" + sample, sample <= n);
+            }
+        }
+
+
+Bug 3
+
+    in file MathArrays.java 
+
+                throw new DimensionMismatchException(len, b.length);            
+            }            
+                                    
+        +    if (len == 1) {            
+        +        // Revert to scalar multiplication.            
+        +        return a[0] * b[0];            
+        +    }            
+            
+            final double[] prodHigh = new double[len];            
+            double prodLowSum = 0;
+
+    failing test: 
+
+        org.apache.commons.math3.util.MathArraysTest:testLinearCombinationWithSingleElementArray
+        java.lang.ArrayIndexOutOfBoundsException: 1
+
+        @Test
+        public void testLinearCombinationWithSingleElementArray() {
+            final double[] a = { 1.23456789 };
+            final double[] b = { 98765432.1 };
+
+            Assert.assertEquals(a[0] * b[0], MathArrays.linearCombination(a, b), 0d);
+        }
+
+
