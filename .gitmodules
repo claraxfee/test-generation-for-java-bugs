@@ -1,0 +1,3 @@
+[submodule "evosuite"]
+	path = evosuite
+	url = https://github.com/EvoSuite/evosuite.git
