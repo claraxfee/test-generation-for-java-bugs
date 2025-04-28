@@ -7,8 +7,10 @@ IMPORTANT - To clone the repo with evosuite inluded run "git clone --recurse-sub
 
 Useful Elements of Evosuite:
 /evosuite/client/src/main/java/org/evosuite/seeding/ConstantPool.java 
+
 /evosuite/client/src/main/java/org/evosuite/seeding/StaticConstantPool.java
 
+/evosuite-copy/client/src/main/java/org/evosuite/testcase/TestFactory.java
 
 LLM Generation Stage:
 Our goal: Given a prompt and certain sections of buggy code, the LLM generates a pool of primatives which are more likely to trigger the given bug. 
