@@ -12,7 +12,7 @@ Useful Elements of Evosuite:
 
 /evosuite-copy/client/src/main/java/org/evosuite/testcase/TestFactory.java
 
-Trace of primative creation: TestFactory.java -> satisfyParameters() -> createVariable() -> attemptGeneration() -> createPrimative() -> primativeStatment.getRandomStatement();
+Trace of primative creation: TestFactory.java -> satisfyParameters() -> createVariable() -> attemptGeneration() -> createPrimative() -> primativeStatment.getRandomStatement() -> big if-else for different primative statment classes -> <primativeclass>.randomize() says whether to use a new random primative or constant pool primative.
 
 LLM Generation Stage:
 Our goal: Given a prompt and certain sections of buggy code, the LLM generates a pool of primatives which are more likely to trigger the given bug. 
